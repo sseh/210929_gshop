@@ -5,7 +5,6 @@ import Search from '../pages/Search/Search.vue'
 import Order from '../pages/Order/Order.vue'
 import Profile from '../pages/Profile/Profile.vue'
 import Login from '../pages/Login/Login.vue'
-import Scroll from '../pages/Scroll/Scroll.vue'
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -37,10 +36,6 @@ export default new VueRouter({
     {
       path: '/login',
       component: Login,
-    },
-    {
-      path: '/scroll',
-      component: Scroll,
     },
   ],
 })

@@ -31,7 +31,7 @@
 export default {
   name: 'FooterGuide',
   methods: {
-    goTo (path) {
+    goTo(path) {
       this.$router.replace(path)
     },
   },
