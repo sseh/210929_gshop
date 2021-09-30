@@ -43,5 +43,7 @@ module.exports = {
         asyncArrow: 'always',
       },
     ],
+    // 参数定义是否需要使用 args
+    'no-unused-vars': ['error', { vars: 'all', args: 'none', ignoreRestSiblings: false }],
   },
 }
