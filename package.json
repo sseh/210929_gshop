@@ -11,10 +11,12 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@better-scroll/core": "^2.4.2",
     "axios": "^0.21.4",
     "better-scroll": "^2.4.2",
     "html-entities": "^2.3.2",
     "mint-ui": "^2.2.13",
+    "mockjs": "^1.1.0",
     "swiper": "^4.5.1",
     "vue": "^2.5.2",
     "vue-router": "^3.5.2",
