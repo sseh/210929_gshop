@@ -3,7 +3,7 @@
         <div class="goods">
             <div class="menu-wrapper" ref="menuWrapper">
                 <ul>
-                    <li class="menu-item" v-for="(good, index) in goods" :key="index" :class="{current: index === currentIndex}">
+                    <li class="menu-item" v-for="(good, index) in goods" :key="index" :class="{current: index === currentIndex}" @click="clickMenuItem(index)">
                         <span class="text bottom-border-1px">
                             <img class="icon" :src="good.icon" v-if="good.icon">
                             {{good.name}}
@@ -12,7 +12,7 @@
                 </ul>
             </div>
             <div class="foods-wrapper" ref="foodsWrapper">
-                <ul>
+                <ul ref="foodsUl">
                     <li class="food-list-hook" v-for="(good, index) in goods" :key="index">
                         <h1 class="title">{{good.name}}</h1>
                         <ul>
@@ -50,7 +50,7 @@
     </div>
 </template>
 <script>
-import BScroll from '@better-scroll/core'
+import BScroll from 'better-scroll'
 import { mapState } from 'vuex'
 export default {
   name: 'ShopGoods',
@@ -64,11 +64,8 @@ export default {
     this.$store.dispatch('getShopGoods', () => {
       // 数据更新后执行
       this.$nextTick(() => {
-        // 列表显示之后创建
-        const menu = new BScroll('.menu-wrapper')
-        console.log(menu)
-        const foods = new BScroll('.foods-wrapper')
-        console.log(foods)
+        this._initScroll()
+        this._initTops()
       })
     })
   },
@@ -77,7 +74,70 @@ export default {
 
     // 计算得到当前分类的下标
     currentIndex() {
-      return 0
+      // 得到条件数据
+      const { scrollY, tops } = this
+      // 根据条件计算产生一个结果
+      const index = tops.findIndex((top, index) => {
+        // scrollY >= 当前top && scrollY < 下一个top
+        return scrollY >= top && scrollY < tops[index + 1]
+      })
+      // 返回结果
+      return index
+    },
+  },
+  methods: {
+    // 初始化滚动
+    _initScroll() {
+      // 列表显示之后创建
+      const menuScroll = new BScroll('.menu-wrapper', {
+        click: true,
+      })
+      console.log(menuScroll)
+      this.foodsScroll = new BScroll('.foods-wrapper', {
+        probeType: 2, // 惯性滑动不触发
+        click: true,
+      })
+      //   console.log(this.foodsScroll)
+
+      // 给右侧列表绑定scroll监听
+      this.foodsScroll.on('scroll', ({ x, y }) => {
+        console.log(x, y)
+        this.scrollY = Math.abs(y)
+      })
+
+      // 给右侧列表绑定scroll结束监听
+      this.foodsScroll.on('scrollEnd', ({ x, y }) => {
+        console.log('scrooEnd', x, y)
+        this.scrollY = Math.abs(y)
+      })
+    },
+
+    // 初始化Tops
+    _initTops() {
+      // 初始化Tops数组
+      const tops = []
+      let top = 0
+      tops.push(top)
+      // 找到所有分类的li，计算各自top，放入tops
+      const lis = this.$refs.foodsUl.getElementsByClassName('food-list-hook')
+      Array.prototype.slice.call(lis).forEach(li => {
+        top += li.clientHeight
+        tops.push(top)
+      })
+      // 更新data中的tops
+      this.tops = tops
+      console.log(tops)
+    },
+
+    // 点击左侧分类
+    clickMenuItem(index) {
+      console.log(index)
+      // 得到目标位置scrollY值
+      const scrollY = this.tops[index]
+      // 点击时立即更新分类高亮
+      this.scrollY = scrollY
+      // 右侧滚动到指定分类
+      this.foodsScroll.scrollTo(0, -scrollY, 300)
     },
   },
 }
