@@ -1,8 +1,9 @@
 /**
  * actions 模块
  */
-import { reqAddress, reqCategorys, reqShops, reqUserInfo, reqLogout, reqShopInfo, reqShopRatings, reqShopGoods } from '../api'
+import { reqSearchShops, reqAddress, reqCategorys, reqShops, reqUserInfo, reqLogout, reqShopInfo, reqShopRatings, reqShopGoods } from '../api'
 import {
+  RECEIVE_SEARCH_SHOPS,
   CLEAR_CART,
   RECEIVE_ADDRESS,
   RECEIVE_CATEGORYS,
@@ -100,5 +101,16 @@ export default {
   // 同步清空购物车
   clearCart({ commit }) {
     commit(CLEAR_CART)
+  },
+
+  // 异步获取商家商品列表
+  async searchShops({ commit, state }, keyword) {
+    const geohash = state.latitude + ',' + state.longitude
+    const result = await reqSearchShops(geohash, keyword)
+    if (result.code === 0) {
+      const searchShops = result.data
+      console.log(searchShops)
+      commit(RECEIVE_SEARCH_SHOPS, { searchShops })
+    }
   },
 }

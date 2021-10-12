@@ -3,6 +3,7 @@
  */
 import Vue from 'vue'
 import {
+  RECEIVE_SEARCH_SHOPS,
   CLEAR_CART,
   RECEIVE_ADDRESS,
   RECEIVE_CATEGORYS,
@@ -63,5 +64,9 @@ export default {
     state.cartFoods.forEach(food => (food.count = 0))
     // 移除购物车中所有购物项
     state.cartFoods = []
+  },
+
+  [RECEIVE_SEARCH_SHOPS](state, { searchShops }) {
+    state.searchShops = searchShops
   },
 }
