@@ -2,7 +2,19 @@
  * actions 模块
  */
 import { reqAddress, reqCategorys, reqShops, reqUserInfo, reqLogout, reqShopInfo, reqShopRatings, reqShopGoods } from '../api'
-import { RECEIVE_ADDRESS, RECEIVE_CATEGORYS, RECEIVE_SHOPS, RECEIVE_USER_INFO, RESET_USER_INFO, RECEIVE_INFO, RECEIVE_RATINGS, RECEIVE_GOODS, INCREMENT_FOOD_COUNT, DECREMENT_FOOD_COUNT } from './mutation-types'
+import {
+  CLEAR_CART,
+  RECEIVE_ADDRESS,
+  RECEIVE_CATEGORYS,
+  RECEIVE_SHOPS,
+  RECEIVE_USER_INFO,
+  RESET_USER_INFO,
+  RECEIVE_INFO,
+  RECEIVE_RATINGS,
+  RECEIVE_GOODS,
+  INCREMENT_FOOD_COUNT,
+  DECREMENT_FOOD_COUNT,
+} from './mutation-types'
 
 export default {
   // 异步获取地址
@@ -83,5 +95,10 @@ export default {
     } else {
       commit(DECREMENT_FOOD_COUNT, { food })
     }
+  },
+
+  // 同步清空购物车
+  clearCart({ commit }) {
+    commit(CLEAR_CART)
   },
 }
